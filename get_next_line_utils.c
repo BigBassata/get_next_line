@@ -6,56 +6,119 @@
 /*   By: licohen <licohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 16:29:06 by licohen           #+#    #+#             */
-/*   Updated: 2024/06/15 15:06:00 by licohen          ###   ########.fr       */
+/*   Updated: 2024/06/19 18:53:52 by licohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// char	*ft_strjoin(char *s1, char *s2)
-// {
-// 	int		i;
-// 	int		j;
-// 	char	*join;
 
-// 	i = 0;
-// 	j = 0;
-// 	join = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-//     if (!join)
-//         return (NULL);
-// 	while (s1[i])
-// 	{
-// 		join[i] = s1[i];
-// 		i++;
-// 	}
-// 	while (s2[j])
-// 	{
-// 		join[i] = s2[j];
-// 		i++;
-// 		j++;
-// 	}
-//     join[i] = '\0';
-// 	return (join);
-// }
-
-int	ft_strlen(char *s)
+size_t	ft_strlen(const char *s)
 {
-	int	len;
+	size_t	i;
 
-	len = 0;
-	while (s[len])
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
+char	*ft_strdup(const char *s)
+{
+	char	*str;
+	size_t	i;
+
+	str = malloc(sizeof(char) * ft_strlen(s) + 1);
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (s[i])
 	{
-		len++;
+		str[i] = s[i];
+		i++;
 	}
-	return (len);
+	str[i] = '\0';
+	return (str);
 }
 
-int	main(void)
+char	*ft_strchr(const char *s, int c)
 {
-	char *s1 = "Hello";
-	char *s2 = ",World";
-	char *s_new;
+	size_t	i;
 
-	s_new = ft_strjoin(s1, s2);
-	printf("%s\n", s_new);
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == (char)c)
+			return ((char *)s + i);
+		i++;
+	}
+	if (s[i] == (char)c)
+		return ((char *)s + i);
+	return (NULL);
 }
+
+char	*ft_substr(const char *s, unsigned int start, size_t len)
+{
+	char	*str;
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	if (start + len > ft_strlen(s))
+		len = ft_strlen(s) - start;
+	if (ft_strlen(s) < start)
+		len = 0;
+	str = malloc(sizeof(char) * len + 1);
+	if (!str)
+		return (NULL);
+	while (s[i])
+	{
+		if (i >= start && j < len)
+		{
+			str[j] = s[i];
+			j++;
+		}
+		i++;
+	}
+	str[j] = '\0';
+	return (str);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*str;
+	size_t	len;
+	size_t	i;
+	size_t	j;
+
+	len = ft_strlen(s1) + ft_strlen(s2);
+	str = malloc(sizeof(char) * len + 1);
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2[j])
+	{
+		str[i] = s2[j];
+		i++;
+		j++;
+	}
+	str[i] = '\0';
+	return (str);
+}
+
+// int	main(void)
+// {
+// 	char *s1 = "Hello";
+// 	char *s2 = ",World";
+// 	char *s_new;
+
+// 	s_new = ft_strjoin(s1, s2);
+// 	printf("%s\n", s_new);
+// }
