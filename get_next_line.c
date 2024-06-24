@@ -6,65 +6,64 @@
 /*   By: licohen <licohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 16:28:39 by licohen           #+#    #+#             */
-/*   Updated: 2024/06/19 18:53:50 by licohen          ###   ########.fr       */
+/*   Updated: 2024/06/24 15:30:09 by licohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char *read_until_newline(int fd, char *stash)
-{   
-    char buffer[BUFFER_SIZE + 1];
-    char *new_stash;
-    ssize_t b_read;
-    
-    b_read = 1;
-    while (b_read > 0)
-    {
-        b_read = read(fd, buffer, BUFFER_SIZE);
-        if (b_read == -1)
-            return (NULL);
-        // if (b_read == 0)
-        //     break ;
-        buffer[b_read] = '\0';
-        new_stash = stash;
-        stash = ft_strjoin(new_stash, buffer);
-        free(new_stash);
-
-        if (ft_strchr(buffer, '\n'))
-        break ;
-    }
-    return (stash);
-    
-}
-
-char *get_next_line(int fd)
+char	*ft_read(int fd, char *str)
 {
-    static char *stash = NULL;
-    char *line;
+	char	*buff;
+	int		rd_bytes;
 
-    if (fd < 0 || BUFFER_SIZE <= 0)
-        return NULL;
-    line = read_until_newline(fd, stash);
-    
-    return (line);
+	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buff)
+		return (NULL);
+	rd_bytes = 1;
+	while (!ft_strchr(str, '\n') && rd_bytes != 0)
+	{
+		rd_bytes = read(fd, buff, BUFFER_SIZE);
+		if (rd_bytes < 0)
+		{
+			free(str);
+			free(buff);
+			return (NULL);
+		}
+		buff[rd_bytes] = '\0';
+		str = ft_strjoin(str, buff);
+	}
+	free(buff);
+	return (str);
 }
 
-// void	read_file(const char *file)
-// {
-// 	int		fd;
-// 	char	*line;
+char	*get_next_line(int fd)
+{
+	char		*line;
+	static char	*str;
 
-// 	fd = open(file, O_RDONLY);
-// 	while ((line = get_next_line(fd)) != NULL)
-// 	{
-// 		printf("ligne: %s\n", line);
-// 	}
-// 	free(line);
-// 	close(fd);
-// }
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (0);
+	str = ft_read(fd, str);
+	if (!str)
+		return (NULL);
+	line = ft_get_line(str);
+	str = ft_get_rest(str);
+	return (line);
+}
 
-// int	main(void)
-// {
-// 	read_file("fichier.txt");
-// } 
+int main (void)
+{
+	int fd = open ("fichier.txt", O_RDONLY);
+	char *line;
+	int i = 0;
+
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("%s", line);
+		free(line);
+		i++;
+	}
+	close (fd);
+	return (0);
+}
