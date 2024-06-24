@@ -6,7 +6,7 @@
 /*   By: licohen <licohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 16:28:39 by licohen           #+#    #+#             */
-/*   Updated: 2024/06/24 15:30:09 by licohen          ###   ########.fr       */
+/*   Updated: 2024/06/24 16:39:52 by licohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,26 @@
 
 char	*ft_read(int fd, char *str)
 {
-	char	*buff;
-	int		rd_bytes;
+	char	*buffer;
+	int		b_read;
 
-	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!buff)
+	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
 		return (NULL);
-	rd_bytes = 1;
-	while (!ft_strchr(str, '\n') && rd_bytes != 0)
+	b_read = 1;
+	while (!ft_strchr(str, '\n') && b_read != 0)
 	{
-		rd_bytes = read(fd, buff, BUFFER_SIZE);
-		if (rd_bytes < 0)
+		b_read = read(fd, buffer, BUFFER_SIZE);
+		if (b_read < 0)
 		{
 			free(str);
-			free(buff);
+			free(buffer);
 			return (NULL);
 		}
-		buff[rd_bytes] = '\0';
-		str = ft_strjoin(str, buff);
+		buffer[b_read] = '\0';
+		str = ft_strjoin(str, buffer);
 	}
-	free(buff);
+	free(buffer);
 	return (str);
 }
 
@@ -52,18 +52,18 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-int main (void)
-{
-	int fd = open ("fichier.txt", O_RDONLY);
-	char *line;
-	int i = 0;
+// int main (void)
+// {
+// 	int fd = open ("fichier.txt", O_RDONLY);
+// 	char *line;
+// 	int i = 0;
 
-	while ((line = get_next_line(fd)) != NULL)
-	{
-		printf("%s", line);
-		free(line);
-		i++;
-	}
-	close (fd);
-	return (0);
-}
+// 	while ((line = get_next_line(fd)) != NULL)
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 		i++;
+// 	}
+// 	close (fd);
+// 	return (0);
+// }
