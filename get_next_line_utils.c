@@ -6,7 +6,7 @@
 /*   By: licohen <licohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 16:29:06 by licohen           #+#    #+#             */
-/*   Updated: 2024/06/24 15:29:07 by licohen          ###   ########.fr       */
+/*   Updated: 2024/06/24 18:01:17 by licohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ char	*ft_strjoin(char *s1, char *s2)
 		s1 = (char *)malloc(1 * sizeof(char));
 		s1[0] = '\0';
 	}
-	if (!s1 || !s2)
-		return (NULL);
 	s = malloc(sizeof(char) * ((ft_strlen(s1) + ft_strlen(s2)) + 1));
 	if (s == NULL)
 		return (NULL);
