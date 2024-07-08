@@ -5,65 +5,67 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: licohen <licohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/11 16:28:39 by licohen           #+#    #+#             */
-/*   Updated: 2024/06/24 16:39:52 by licohen          ###   ########.fr       */
+/*   Created: 2024/07/02 13:37:05 by licohen           #+#    #+#             */
+/*   Updated: 2024/07/08 16:06:40 by licohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_read(int fd, char *str)
+char	*fill_rest(char *str, char *rest)
 {
-	char	*buffer;
-	int		b_read;
+	int	i;
 
-	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!buffer)
-		return (NULL);
-	b_read = 1;
-	while (!ft_strchr(str, '\n') && b_read != 0)
+	i = 0;
+	while (str && str[i] && str[i] != '\n')
+		i++;
+	if (str && str[i] == '\n')
+		i++;
+	rest = ft_substr(str, i, ft_strlen(str + i));
+	if (str && str[i])
+		str[i] = '\0';
+	return (rest);
+}
+
+char	*read_line(int fd, char *str)
+{
+	ssize_t	bytes_read;
+	char	buffer[BUFFER_SIZE + 1];
+
+	bytes_read = 1;
+	while (bytes_read > 0 && !ft_strchr(str, '\n'))
 	{
-		b_read = read(fd, buffer, BUFFER_SIZE);
-		if (b_read < 0)
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read <= 0)
 		{
-			free(str);
-			free(buffer);
-			return (NULL);
+			if (bytes_read < 0)
+			{
+				free(str);
+				str = NULL;
+			}
+			break ;
 		}
-		buffer[b_read] = '\0';
+		buffer[bytes_read] = '\0';
 		str = ft_strjoin(str, buffer);
+		if (!str)
+		return(NULL);
 	}
-	free(buffer);
 	return (str);
 }
 
 char	*get_next_line(int fd)
 {
-	char		*line;
-	static char	*str;
+	static char *rest = NULL;
+	char *str;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (0);
-	str = ft_read(fd, str);
-	if (!str)
 		return (NULL);
-	line = ft_get_line(str);
-	str = ft_get_rest(str);
-	return (line);
+	str = NULL;
+	if (rest)
+		str = rest;
+	str = read_line(fd, str);
+	rest = fill_rest(str, rest);
+	if (!str)
+		free(rest);
+	return (str);
 }
-
-// int main (void)
-// {
-// 	int fd = open ("fichier.txt", O_RDONLY);
-// 	char *line;
-// 	int i = 0;
-
-// 	while ((line = get_next_line(fd)) != NULL)
-// 	{
-// 		printf("%s", line);
-// 		free(line);
-// 		i++;
-// 	}
-// 	close (fd);
-// 	return (0);
-// }
