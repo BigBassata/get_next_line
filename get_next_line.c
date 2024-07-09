@@ -6,7 +6,7 @@
 /*   By: licohen <licohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 13:37:05 by licohen           #+#    #+#             */
-/*   Updated: 2024/07/08 16:06:40 by licohen          ###   ########.fr       */
+/*   Updated: 2024/07/09 15:50:04 by licohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,17 @@
 
 char	*fill_rest(char *str, char *rest)
 {
-	int	i;
+	int		i;
+	char	*temp;
 
 	i = 0;
 	while (str && str[i] && str[i] != '\n')
 		i++;
 	if (str && str[i] == '\n')
 		i++;
-	rest = ft_substr(str, i, ft_strlen(str + i));
+	temp = ft_substr(str, i, ft_strlen(str + i));
+	free(rest);
+	rest = temp;
 	if (str && str[i])
 		str[i] = '\0';
 	return (rest);
@@ -48,24 +51,36 @@ char	*read_line(int fd, char *str)
 		buffer[bytes_read] = '\0';
 		str = ft_strjoin(str, buffer);
 		if (!str)
-		return(NULL);
+			return (NULL);
 	}
 	return (str);
 }
 
 char	*get_next_line(int fd)
 {
-	static char *rest = NULL;
-	char *str;
+	static char	*rest = NULL;
+	char		*str;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	str = NULL;
-	if (rest)
-		str = rest;
+	str = rest;
+	rest = NULL;
 	str = read_line(fd, str);
 	rest = fill_rest(str, rest);
 	if (!str)
 		free(rest);
 	return (str);
+}
+
+int main()
+{
+    int fd = open("test.txt", O_RDONLY);
+    char *line;
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        printf("%s", line);
+        free(line);
+    }
+    close(fd);
+    return (0);
 }

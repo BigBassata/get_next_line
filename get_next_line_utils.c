@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: licohen <licohen@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/02 13:37:05 by licohen           #+#    #+#             */
+/*   Updated: 2024/07/09 15:46:17 by licohen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "get_next_line.h"
 
@@ -72,7 +83,7 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 	if (len > (ft_strlen(s) - start))
 		len = ft_strlen(s) - start;
 	if (start >= ft_strlen(s))
-		len = 0;
+		return (ft_strdup(""));
 	str = malloc(sizeof(char) * (len + 1));
 	if (!str)
 		return (NULL);
@@ -80,6 +91,26 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 	while (i < len && s[start + i])
 	{
 		str[i] = s[start + i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
+}
+
+char	*ft_strdup(const char *s)
+{
+	size_t	i;
+	size_t	len;
+	char	*str;
+
+	len = ft_strlen(s);
+	str = (char *) malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (s[i])
+	{
+		str[i] = s[i];
 		i++;
 	}
 	str[i] = '\0';

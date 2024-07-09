@@ -6,7 +6,7 @@
 /*   By: licohen <licohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 14:14:01 by licohen           #+#    #+#             */
-/*   Updated: 2024/07/02 14:13:42 by licohen          ###   ########.fr       */
+/*   Updated: 2024/07/09 15:42:20 by licohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@ size_t	ft_strlen(const char *s);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strchr(const char *s, int c);
 char	*ft_substr(char *s, unsigned int start, size_t len);
+char	*ft_strdup(const char *s);
 
 #endif
