@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: licohen <licohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 14:50:03 by user              #+#    #+#             */
-/*   Updated: 2024/07/11 15:35:08 by user             ###   ########.fr       */
+/*   Updated: 2024/07/13 14:48:14 by licohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ char	*get_next_line(int fd)
 		free(rest[fd]);
 	return (str);
 }
-
 
 // int main()
 // {
